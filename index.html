@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Indian Recipe Suggestions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-utensils"></i> आज क्या बनाऊँ?</h1>
+            <p>Stuck on what to make? Let us help you decide!</p>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="cuisine"><i class="fas fa-globe-asia"></i> Cuisine:</label>
+                <select id="cuisine">
+                    <option value="all">All Cuisines</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="course"><i class="fas fa-list"></i> Course:</label>
+                <select id="course">
+                    <option value="all">All Courses</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="diet"><i class="fas fa-leaf"></i> Diet:</label>
+                <select id="diet">
+                    <option value="all">All Diets</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="time"><i class="fas fa-clock"></i> Max Time (mins):</label>
+                <select id="time">
+                    <option value="9999">Any Time</option>
+                    <option value="15">15 mins</option>
+                    <option value="30">30 mins</option>
+                    <option value="45">45 mins</option>
+                    <option value="60">60 mins</option>
+                </select>
+            </div>
+
+            <button id="random-btn"><i class="fas fa-random"></i> Suggest Random Recipe</button>
+            <button id="surprise-btn"><i class="fas fa-magic"></i> Surprise Me!</button>
+        </div>
+
+        <div class="recipe-container" id="recipe-container">
+            <!-- Recipes will be loaded here -->
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading recipes...
+            </div>
+        </div>
+
+        <div class="recipe-detail" id="recipe-detail">
+            <button id="close-detail"><i class="fas fa-times"></i></button>
+            <div class="detail-content" id="detail-content"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with <i class="fas fa-heart"></i> for Indian home cooks</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
