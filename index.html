@@ -3,8 +3,28 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Daily Indian Recipe Suggestions</title>
+    <meta name="description" content="Stuck on what to make? Let us help you decide!">
+    <meta name="keywords" content="Stuck on what to make? Let us help you decide!">
+    <meta name="author" content="Yash Kumat">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://yashkumat.github.io/ajkyabanau/logo.png">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Daily Indian Recipe Suggestions">
+    <meta property="og:description" content="Stuck on what to make? Let us help you decide!">
+    <meta property="og:image" content="https://yashkumat.github.io/ajkyabanau/logo.png">
+    <meta property="og:url" content="https://yashkumat.github.io/ajkyabanau/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="Stuck on what to make? Let us help you decide!">
+    <meta name="twitter:title" content="Daily Indian Recipe Suggestions">
+    <meta name="twitter:description" content="Stuck on what to make? Let us help you decide!">
+    <meta name="twitter:image" content="https://yashkumat.github.io/ajkyabanau/logo.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -49,7 +69,6 @@
                 </select>
             </div>
 
-            <button id="random-btn"><i class="fas fa-random"></i> Suggest Random Recipe</button>
             <button id="surprise-btn"><i class="fas fa-magic"></i> Surprise Me!</button>
         </div>
 
@@ -58,6 +77,10 @@
             <div class="loading">
                 <i class="fas fa-spinner fa-spin"></i> Loading recipes...
             </div>
+        </div>
+
+        <div class="load-more-container">
+            <button id="load-more-btn" class="load-more-btn">Load More Recipes</button>
         </div>
 
         <div class="recipe-detail" id="recipe-detail">
