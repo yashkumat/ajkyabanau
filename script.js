@@ -4,22 +4,27 @@ document.addEventListener("DOMContentLoaded", function () {
   const recipeDetail = document.getElementById("recipe-detail");
   const closeDetail = document.getElementById("close-detail");
   const detailContent = document.getElementById("detail-content");
-  const randomBtn = document.getElementById("random-btn");
   const surpriseBtn = document.getElementById("surprise-btn");
   const cuisineFilter = document.getElementById("cuisine");
   const courseFilter = document.getElementById("course");
   const dietFilter = document.getElementById("diet");
   const timeFilter = document.getElementById("time");
   const sortButtons = document.querySelectorAll(".sort-btn");
+  const loadMoreBtn = document.getElementById("load-more-btn");
+
+  // Configuration
+  const INITIAL_RECIPES_TO_SHOW = 6;
+  const ADDITIONAL_RECIPES_TO_SHOW = 6;
 
   let recipes = [];
   let filteredRecipes = [];
+  let displayedRecipeCount = 0;
+  let currentSortMethod = "random";
 
   // Load recipe data from CSV (converted to JSON)
   async function loadRecipes() {
     try {
       // In a real implementation, you would fetch this from your CSV converted to JSON
-      // For this example, we'll use a placeholder
       const response = await fetch("recipes.json");
       recipes = await response.json();
 
@@ -29,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Initialize filters
       initFilters();
 
-      // Display all recipes initially
+      // Display initial recipes
       filterRecipes();
     } catch (error) {
       console.error("Error loading recipes:", error);
@@ -109,12 +114,20 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     });
 
-    // Sort recipes (default is random)
-    sortRecipes("random");
+    // Reset displayed count when filters change
+    displayedRecipeCount = 0;
+
+    // Sort recipes
+    sortRecipes(currentSortMethod);
+
+    // Show initial recipes
+    displayRecipes(INITIAL_RECIPES_TO_SHOW);
   }
 
   // Sort recipes based on selected option
   function sortRecipes(sortBy) {
+    currentSortMethod = sortBy;
+
     switch (sortBy) {
       case "time":
         filteredRecipes.sort((a, b) => a.TotalTimeInMins - b.TotalTimeInMins);
@@ -128,21 +141,31 @@ document.addEventListener("DOMContentLoaded", function () {
         filteredRecipes = filteredRecipes.sort(() => Math.random() - 0.5);
         break;
     }
-
-    displayRecipes();
   }
 
   // Display recipes in the container
-  function displayRecipes() {
+  function displayRecipes(numToShow) {
     if (filteredRecipes.length === 0) {
       recipeContainer.innerHTML =
         '<div class="no-results">No recipes match your filters. Try adjusting your criteria.</div>';
+      loadMoreBtn.classList.add("hidden");
       return;
     }
 
-    recipeContainer.innerHTML = "";
+    // Clear container only if we're showing initial set
+    if (displayedRecipeCount === 0) {
+      recipeContainer.innerHTML = "";
+    }
 
-    filteredRecipes.forEach((recipe) => {
+    // Calculate how many recipes to show
+    const endIndex = Math.min(
+      displayedRecipeCount + numToShow,
+      filteredRecipes.length
+    );
+
+    // Add recipes to container
+    for (let i = displayedRecipeCount; i < endIndex; i++) {
+      const recipe = filteredRecipes[i];
       const recipeCard = document.createElement("div");
       recipeCard.className = "recipe-card";
       recipeCard.innerHTML = `
@@ -165,7 +188,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
       recipeCard.addEventListener("click", () => showRecipeDetail(recipe));
       recipeContainer.appendChild(recipeCard);
-    });
+    }
+
+    displayedRecipeCount = endIndex;
+
+    // Show or hide load more button
+    if (displayedRecipeCount >= filteredRecipes.length) {
+      loadMoreBtn.classList.add("hidden");
+    } else {
+      loadMoreBtn.classList.remove("hidden");
+    }
   }
 
   // Show recipe detail modal
@@ -234,14 +266,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.style.overflow = "auto";
   }
 
-  // Get a random recipe
-  function getRandomRecipe() {
-    if (filteredRecipes.length === 0) return;
-
-    const randomIndex = Math.floor(Math.random() * filteredRecipes.length);
-    showRecipeDetail(filteredRecipes[randomIndex]);
-  }
-
   // Get a surprise recipe (completely random from all recipes)
   function getSurpriseRecipe() {
     if (recipes.length === 0) return;
@@ -252,15 +276,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Event Listeners
   closeDetail.addEventListener("click", closeRecipeDetail);
-  randomBtn.addEventListener("click", getRandomRecipe);
   surpriseBtn.addEventListener("click", getSurpriseRecipe);
+  loadMoreBtn.addEventListener("click", () =>
+    displayRecipes(ADDITIONAL_RECIPES_TO_SHOW)
+  );
 
   // Sort buttons
   sortButtons.forEach((button) => {
     button.addEventListener("click", () => {
       sortButtons.forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
-      sortRecipes(button.dataset.sort);
+      currentSortMethod = button.dataset.sort;
+      sortRecipes(currentSortMethod);
+
+      // Reset and show initial recipes
+      displayedRecipeCount = 0;
+      displayRecipes(INITIAL_RECIPES_TO_SHOW);
     });
   });
 
